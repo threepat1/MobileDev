@@ -5,19 +5,42 @@ using UnityEngine;
 public class Flipper : MonoBehaviour {
     public float restPos = 0f;
     public float pressedPos = 45f;
-    public float hitS
+    public float hitStrenght = 10000f;
+    public float flipperDamper = 150f;
+    HingeJoint hinge;
+    public string inputName;
+    Touch touch;
+    JointSpring spring = new JointSpring();
+
     // Use this for initialization
     void Start () {
-        GetComponent<Rigidbody>().maxAngularVelocity = 10f;
+        hinge = GetComponent<HingeJoint>();
+        hinge.useSpring = true;
     }
 	
 	// Update is called once per frame
-	void OnTouchDown () {
+	void Update () {
 
-            HingeJoint hinge = GetComponent<HingeJoint>();
-            JointMotor motor = hinge.motor;
-            motor.targetVelocity = -motor.targetVelocity;
-            hinge.motor = motor;
+        spring.spring = hitStrenght;
+        spring.damper = flipperDamper;
 
+        hinge.spring = spring;
+        hinge.useLimits = true;
+    }
+    public void OnTouchUp()
+    {
+        spring.targetPosition = restPos;
+    }
+    public void OnTouchDown()
+    {
+
+    }
+    public void OnTouchStay()
+    {
+        spring.targetPosition = pressedPos;
+    }
+    public void OnTouchExit()
+    {
+        spring.targetPosition = restPos;
     }
 }

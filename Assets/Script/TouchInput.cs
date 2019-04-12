@@ -8,7 +8,7 @@ public class TouchInput : MonoBehaviour {
     private List<GameObject> touchList = new List<GameObject>();
     private GameObject[] touchOld;
     private RaycastHit hit;
-
+    public GameObject[] targets;
 
 	// Use this for initialization
 	void Start () {
@@ -34,17 +34,29 @@ public class TouchInput : MonoBehaviour {
                 if (Input.GetMouseButtonDown(0))
                 {
                     reciepient.SendMessage("OnTouchDown", hit.point, SendMessageOptions.DontRequireReceiver);
+                    for (int i = 0; i < targets.Length; i++)
+                    {
+                        targets[i].SendMessage("OnTouchDown", hit.point, SendMessageOptions.DontRequireReceiver);
 
+                    }
                 }
                 if (Input.GetMouseButton(0))
                 {
                     reciepient.SendMessage("OnTouchStay", hit.point, SendMessageOptions.DontRequireReceiver);
-                    Debug.Log("OnTouchStay");
+                    for (int i = 0; i < targets.Length; i++)
+                    {
+                        targets[i].SendMessage("OnTouchStay", hit.point, SendMessageOptions.DontRequireReceiver);
+
+                    }
                 }
                 if (Input.GetMouseButtonUp(0))
                 {
                     reciepient.SendMessage("OnTouchUp", hit.point, SendMessageOptions.DontRequireReceiver);
-                    Debug.Log("OnTouchUp");
+                    for (int i = 0; i < targets.Length; i++)
+                    {
+                        targets[i].SendMessage("OnTouchUp", hit.point, SendMessageOptions.DontRequireReceiver);
+
+                    }
                 }
                 
             }
@@ -53,7 +65,11 @@ public class TouchInput : MonoBehaviour {
                 if (!touchList.Contains(item))
                 {
                     item.SendMessage("OnTouchExit", hit.point, SendMessageOptions.DontRequireReceiver);
-                    Debug.Log("OnTouchExit");
+                    for (int i = 0; i < targets.Length; i++)
+                    {
+                        targets[i].SendMessage("OnTouchExit", hit.point, SendMessageOptions.DontRequireReceiver);
+
+                    }
                 }
             }
         }
